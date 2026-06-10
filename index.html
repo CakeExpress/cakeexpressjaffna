@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cake Express Nelliady - 10% Discount</title>
+<title>Cake Express Nelliady - Birthday Cakes</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 body{background:#fff5f7;color:#333}
@@ -39,6 +39,7 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
 .cat-btn{background:#e91e63; color:white; border:none; padding:8px 14px; border-radius:5px; font-size:12px; font-weight:bold; white-space:nowrap; flex-shrink:0; cursor:pointer}
 .cat-btn:active{background:#c2185b}
 
+/* Cake Grid - Mobile 2, PC 4 column */
 .cake-grid{display:grid;grid-template-columns:1fr 1fr; gap:12px}
 @media(min-width:768px){.cake-grid{grid-template-columns:repeat(4,1fr)}}
 
@@ -99,20 +100,20 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
     <input type="text" placeholder="I'm Shopping for...">
     <button>🔍</button>
   </div>
-  <p class="tagline">BEST CAKES IN JAFNA</p>
+  <p class="tagline">100+ BIRTHDAY CAKES IN JAFNA</p>
 </header>
 
 <section class="hero">
 <h1>🍰 Cake Express</h1>
-<p style="color:#fff;font-size:1.2rem;margin:10px 0">Nelliady-யின் சுவையான கேக்</p>
+<p style="color:#fff;font-size:1.2rem;margin:10px 0">Nelliady-யின் சுவையான Birthday Cake</p>
 <div class="discount">🎉 10% Discount இப்போ!</div>
 <br>
 <a href="https://wa.me/94786357139?text=Hi%20Cake%20Express" class="btn">📱 WhatsApp-ல Order பண்ணுங்க</a>
 </section>
 
 <section class="menu">
-<h2>Cakes</h2>
-<p>20 cakes item(s) available our store</p>
+<h2>Birthday Cake Collection</h2>
+<p>100 cakes available - Select Your Favorite</p>
 
 <div class="cat-box">
   <div class="cat-scroll">
@@ -125,149 +126,7 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
   </div>
 </div>
 
-<div class="cake-grid">
-
-  <div class="cake-card">
-    <img src="cake.jpg" onclick="openLightbox(this)" alt="birthday cake">
-    <h3>birthday cake</h3>
-    <p class="price">LKR 2,500/-</p>
-    <button onclick="openPopup('birthday cake', '2500')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake2.jpg" onclick="openLightbox(this)" alt="Vanilla Cake 1kg">
-    <h3>Vanilla Cake 1kg</h3>
-    <p class="price">LKR 2,300/-</p>
-    <button onclick="openPopup('Vanilla Cake 1kg', '2300')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake3.jpg" onclick="openLightbox(this)" alt="Red Velvet Cake 1kg">
-    <h3>Red Velvet Cake 1kg</h3>
-    <p class="price">LKR 3,200/-</p>
-    <button onclick="openPopup('Red Velvet Cake 1kg', '3200')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake4.jpg" onclick="openLightbox(this)" alt="Black Forest 1kg">
-    <h3>Black Forest 1kg</h3>
-    <p class="price">LKR 2,900/-</p>
-    <button onclick="openPopup('Black Forest 1kg', '2900')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake5.jpg" onclick="openLightbox(this)" alt="Butterscotch 1kg">
-    <h3>Butterscotch 1kg</h3>
-    <p class="price">LKR 2,800/-</p>
-    <button onclick="openPopup('Butterscotch 1kg', '2800')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake6.jpg" onclick="openLightbox(this)" alt="Strawberry Cake 1kg">
-    <h3>Strawberry Cake 1kg</h3>
-    <p class="price">LKR 3,100/-</p>
-    <button onclick="openPopup('Strawberry Cake 1kg', '3100')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake7.jpg" onclick="openLightbox(this)" alt="Pineapple Cake 1kg">
-    <h3>Pineapple Cake 1kg</h3>
-    <p class="price">LKR 2,700/-</p>
-    <button onclick="openPopup('Pineapple Cake 1kg', '2700')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake8.jpg" onclick="openLightbox(this)" alt="Birthday Special 1kg">
-    <h3>Birthday Special 1kg</h3>
-    <p class="price">LKR 3,000/-</p>
-    <button onclick="openPopup('Birthday Special 1kg', '3000')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake9.jpg" onclick="openLightbox(this)" alt="Anniversary Cake 1kg">
-    <h3>Anniversary Cake 1kg</h3>
-    <p class="price">LKR 3,500/-</p>
-    <button onclick="openPopup('Anniversary Cake 1kg', '3500')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake10.jpg" onclick="openLightbox(this)" alt="Wedding Cake 2kg">
-    <h3>Wedding Cake 2kg</h3>
-    <p class="price">LKR 5,500/-</p>
-    <button onclick="openPopup('Wedding Cake 2kg', '5500')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake11.jpg" onclick="openLightbox(this)" alt="Kids Cartoon Cake 1kg">
-    <h3>Kids Cartoon Cake 1kg</h3>
-    <p class="price">LKR 3,300/-</p>
-    <button onclick="openPopup('Kids Cartoon Cake 1kg', '3300')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake12.jpg" onclick="openLightbox(this)" alt="Heart Shape Cake 1kg">
-    <h3>Heart Shape Cake 1kg</h3>
-    <p class="price">LKR 3,400/-</p>
-    <button onclick="openPopup('Heart Shape Cake 1kg', '3400')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake13.jpg" onclick="openLightbox(this)" alt="Photo Cake 1kg">
-    <h3>Photo Cake 1kg</h3>
-    <p class="price">LKR 3,800/-</p>
-    <button onclick="openPopup('Photo Cake 1kg', '3800')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake14.jpg" onclick="openLightbox(this)" alt="Chocolate Ganache 1kg">
-    <h3>Chocolate Ganache 1kg</h3>
-    <p class="price">LKR 3,600/-</p>
-    <button onclick="openPopup('Chocolate Ganache 1kg', '3600')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake15.jpg" onclick="openLightbox(this)" alt="Blueberry Cake 1kg">
-    <h3>Blueberry Cake 1kg</h3>
-    <p class="price">LKR 3,300/-</p>
-    <button onclick="openPopup('Blueberry Cake 1kg', '3300')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake16.jpg" onclick="openLightbox(this)" alt="Mango Cake 1kg">
-    <h3>Mango Cake 1kg</h3>
-    <p class="price">LKR 2,900/-</p>
-    <button onclick="openPopup('Mango Cake 1kg', '2900')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake17.jpg" onclick="openLightbox(this)" alt="Cupcake Box 6pcs">
-    <h3>Cupcake Box 6pcs</h3>
-    <p class="price">LKR 1,200/-</p>
-    <button onclick="openPopup('Cupcake Box 6pcs', '1200')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake18.jpg" onclick="openLightbox(this)" alt="Jar Cake 4pcs">
-    <h3>Jar Cake 4pcs</h3>
-    <p class="price">LKR 1,000/-</p>
-    <button onclick="openPopup('Jar Cake 4pcs', '1000')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake19.jpg" onclick="openLightbox(this)" alt="Brownie Box 8pcs">
-    <h3>Brownie Box 8pcs</h3>
-    <p class="price">LKR 1,500/-</p>
-    <button onclick="openPopup('Brownie Box 8pcs', '1500')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-  <div class="cake-card">
-    <img src="cake20.jpg" onclick="openLightbox(this)" alt="Donut Box 6pcs">
-    <h3>Donut Box 6pcs</h3>
-    <p class="price">LKR 1,100/-</p>
-    <button onclick="openPopup('Donut Box 6pcs', '1100')" class="order-btn">🛒 Order Now</button>
-  </div>
-
-</div>
+<div class="cake-grid" id="cakeGrid"></div>
 
 <div class="delivery">
 <h3>🚚 Delivery Available</h3>
@@ -307,7 +166,8 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
 
 <script>
 let currentCake = "";
-let currentPrice = "";
+let currentPrice = "2500";
+const whatsapp = "94786357139";
 
 function toggleMenu() {
   var menu = document.getElementById("sideMenu");
@@ -362,9 +222,23 @@ function sendWhatsApp(){
 
   let msg = `🍰 Order Details%0A%0ACake: ${currentCake}%0APrice: LKR ${currentPrice}/- %0A%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A📍 Address: ${address}%0A📅 Delivery Date: ${date}%0A🕒 Time: ${time}%0A📝 Message: ${note}`;
 
-  window.open(`https://wa.me/94786357139?text=${msg}`, '_blank');
+  window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
   closePopup();
   alert("WhatsApp open ஆகும். Send தட்டுங்க!");
+}
+
+// 1 முதல் 100 வரை Birthday Cake auto generate - kg இல்லாம
+const cakeGrid = document.getElementById('cakeGrid');
+for(let i=1; i<=100; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card';
+  card.innerHTML = `
+    <img src="cake${i}.jpg" onclick="openLightbox(this)" alt="Birthday Cake ${i}" onerror="this.src='https://via.placeholder.com/180x180?text=Birthday+Cake+${i}'">
+    <h3>Birthday Cake ${i}</h3>
+    <p class="price">LKR 2,500/-</p>
+    <button onclick="openPopup('Birthday Cake ${i}', '2500')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
 }
 </script>
 
