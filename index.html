@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cake Express Lk - All Cakes</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#fff5f7;color:#333; transition:0.3s}
+
+.welcome-popup{position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center}
+.welcome-box{background:#fff; padding:25px 20px; border-radius:20px; text-align:center; max-width:320px; animation:zoomIn 0.5s; box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.welcome-box h2{color:#c44569; font-size:22px; margin-bottom:8px}
+.welcome-box p{color:#666; font-size:13px; margin:8px 0; line-height:1.5}
+.follow-btn{color:white; border:none; padding:11px 20px; border-radius:25px; font-weight:bold; cursor:pointer; margin-top:7px; font-size:14px; display:flex; align-items:center; justify-content:center; gap:6px; width:100%}
+.insta-btn{background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)}
+.tiktok-btn{background:linear-gradient(135deg,#000 0%,#25F4EE 100%)}
+.youtube-btn{background:#FF0000}
+.website-follow{background:#2196F3; color:white; border:none; padding:11px 20px; border-radius:25px; font-weight:bold; cursor:pointer; margin-top:7px; font-size:14px; display:flex; align-items:center; justify-content:center; gap:6px; width:100%}
+.follow-count{font-size:11px; color:#2196F3; margin-top:5px; font-weight:600}
+.start-btn{background:#25D366; color:white; border:none; padding:12px 25px; border-radius:25px; font-weight:bold; cursor:pointer; margin-top:12px; font-size:15px; width:100%}
+@keyframes zoomIn{from{transform:scale(0.5); opacity:0} to{transform:scale(1); opacity:1}}
+
+header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:sticky; top:0; z-index:100}
+.top-bar{display:flex; justify-content:space-between; align-items:center}
+.menu-btn{background:#d32f2f; border:none; padding:10px 14px; border-radius:5px; font-size:22px; color:white; cursor:pointer}
+.logo-area{display:flex; align-items:center; gap:10px}
+.logo img{max-height:55px; width:auto; display:block; border-radius:8px}
+.follow-small{color:white; border:none; padding:4px 8px; border-radius:12px; font-size:10px; font-weight:bold; cursor:pointer}
+.follower-count{font-size:9px; color:#666; margin-top:2px; text-align:center}
+.header-btns{display:flex; gap:8px}
+.cart-btn,.call-btn{background:#ff6b35; border:none; padding:10px 14px; border-radius:5px; font-size:20px; color:white; cursor:pointer; text-decoration:none}
+.search-bar{display:flex; margin-top:10px}
+.search-bar input{flex:1; padding:10px; border:1px solid #ddd; border-radius:5px 0 0 5px; font-size:14px; outline:none}
+.search-bar button{background:#ff6b35; border:none; padding:10px 15px; border-radius:0 5px 5px 0; color:white; font-size:16px; cursor:pointer}
+.tagline{text-align:center; color:gray; font-size:13px; margin-top:5px; font-weight:bold}
+
+.side-menu{height:100%; width:0; position:fixed; z-index:200; top:0; left:0; background-color:#fff; overflow-x:hidden; transition:0.3s; padding-top:50px; box-shadow:2px 0 5px rgba(0,0,0,0.3)}
+.side-menu a{padding:12px 20px; text-decoration:none; font-size:16px; color:#333; display:block; border-bottom:1px solid #eee}
+.close-btn{position:absolute; top:10px; right:15px; font-size:28px; background:none; border:none; cursor:pointer}
+.overlay{height:100%; width:0; position:fixed; z-index:199; top:0; left:0; background-color:rgba(0,0,0,0.5); transition:0.3s}
+
+.hero{background:linear-gradient(135deg,#ff6b9d 0%,#c44569 100%); padding:50px 20px; text-align:center}
+.hero h1{font-size:2.2rem; color:#fff; text-shadow:2px 2px 4px rgba(0,0,0,0.3); margin-bottom:10px}
+.discount{background:#fff; color:#ff3366; padding:10px 25px; border-radius:50px; display:inline-block; margin:15px 0; font-weight:bold; font-size:1.1rem; box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+.btn{background:#25D366; color:#fff; padding:15px 40px; border:none; border-radius:50px; font-size:1.1rem; text-decoration:none; display:inline-block; margin:10px; font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+
+.menu{padding:20px 15px; max-width:1200px; margin:auto}
+.menu h2{text-align:center; margin-bottom:15px; color:#c44569; font-size:1.8rem}
+
+.cat-tabs{display:flex; gap:8px; justify-content:center; margin-bottom:20px; flex-wrap:wrap}
+.cat-tab{background:#e0e0e0; color:#333; border:none; padding:10px 14px; border-radius:25px; font-size:12px; font-weight:bold; cursor:pointer}
+.cat-tab.active{background:#e91e63; color:white}
+
+.cake-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media(min-width:768px){.cake-grid{grid-template-columns:repeat(4,1fr)}}
+
+.cake-card{background:#fff; border-radius:8px; padding:8px; border:1px solid #e0e0e0; text-align:center; display:none; position:relative; overflow:hidden}
+.cake-card.show{display:block}
+.cake-card img{width:100%; height:180px; object-fit:cover; border-radius:5px}
+
+.watermark{position:absolute; bottom:85px; left:0; width:100%; background:rgba(0,0,0,0.85); color:#ffd700; font-size:11px; font-weight:bold; padding:6px 0; text-align:center; letter-spacing:1px; z-index:10}
+
+.cake-card h3{font-size:14px; margin:8px 0; height:32px; overflow:hidden; color:#333; font-weight:600}
+.price{font-size:16px; color:#e91e63; font-weight:bold; margin:5px 0}
+.price del{color:#999; font-size:14px; margin-right:5px}
+.order-btn{background:#ff5722; color:white; border:none; width:100%; padding:10px; border-radius:5px; font-weight:bold; cursor:pointer; font-size:14px}
+
+.delivery-check{background:#e8f5e9; padding:18px; text-align:center; margin:30px 0; border-radius:12px; border:2px dashed #4caf50}
+.delivery-check h4{color:#2e7d32; margin-bottom:8px; font-size:18px}
+.delivery-check input{padding:10px; border-radius:5px; border:1px solid #ccc; width:150px; margin:5px; font-size:14px}
+.delivery-check button{padding:10px 18px; background:#4caf50; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold}
+
+.whatsapp-float{position:fixed; width:60px; height:60px; bottom:20px; right:20px; background-color:#25D366; color:white; border-radius:50px; text-align:center; font-size:30px; box-shadow:2px 2px 10px rgba(0,0,0,0.3); z-index:500; display:flex; align-items:center; justify-content:center; text-decoration:none}
+
+.popup-form{display:none; position:fixed; z-index:400; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); overflow-y:auto}
+.popup-content{background:#fff; margin:5% auto; padding:20px; border-radius:10px; width:90%; max-width:420px; max-height:90vh; overflow-y:auto}
+.popup-content h3{color:#c44569; margin-bottom:15px; text-align:center; font-size:1.3rem}
+.popup-content input,.popup-content textarea{width:100%; padding:12px; margin:5px 0 10px 0; border:1px solid #ddd; border-radius:5px; font-size:14px}
+.popup-content button{width:100%; padding:14px; background:#25D366; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; margin-top:10px; font-size:16px}
+.close-popup{float:right; font-size:28px; cursor:pointer; color:#999}
+
+.cake-type-btns{display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap}
+.cake-type-btn{flex:1; padding:10px; border:2px solid #ddd; border-radius:8px; background:white; cursor:pointer; font-size:13px; font-weight:600}
+.cake-type-btn.active{background:#e91e63; color:white; border-color:#e91e63}
+
+.footer{background:#2d3436; color:#fff; text-align:center; padding:30px 20px; margin-top:30px}
+</style>
+</head>
+<body>
+
+<!-- Welcome Popup -->
+<div id="welcomePopup" class="welcome-popup">
+  <div class="welcome-box">
+    <h2>🎂 Welcome to Cake Express Lk 🙏</h2>
+    <p>இலங்கை முழுவதும் சுவையான கேக் டெலிவரி<br>🎉 10% Discount இப்போ நடக்குது!</p>
+    <button class="follow-btn insta-btn" onclick="followInsta()">📸 Instagram</button>
+    <button class="follow-btn tiktok-btn" onclick="followTiktok()">🎵 TikTok</button>
+    <button class="follow-btn youtube-btn" onclick="followYoutube()">▶️ YouTube</button>
+    <button class="website-follow" id="webFollowBtn" onclick="followWebsite()">🔔 Website Follow பண்ணு</button>
+    <div class="follow-count" id="webFollowCount">1,247 per follow pannirukaanga</div>
+    <button class="start-btn" onclick="closeWelcome()">Start Shopping 🛒</button>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div id="sideMenu" class="side-menu">
+  <button class="close-btn" onclick="toggleMenu()">✕</button>
+  <a href="#" onclick="showCategory(event,'birthday'); toggleMenu()">🎂 Birthday Cake 100</a>
+  <a href="#" onclick="showCategory(event,'wedding'); toggleMenu()">💍 Wedding Cake 50</a>
+  <a href="#" onclick="showCategory(event,'mini'); toggleMenu()">🧁 Mini Cake 20</a>
+  <a href="#" onclick="showCategory(event,'kids'); toggleMenu()">🎈 Kids Cake 20</a>
+  <a href="#" onclick="showCategory(event,'round'); toggleMenu()">⭕ Round Cake 20</a>
+  <a href="#" onclick="showCategory(event,'square'); toggleMenu()">⬛ Square Cake 20</a>
+  <a href="#" onclick="showCategory(event,'heart'); toggleMenu()">❤️ Heart Cake 20</a>
+  <a href="#" onclick="showCategory(event,'layer'); toggleMenu()">🎂 Layer Cake 30</a>
+</div>
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+<header>
+  <div class="top-bar">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo-area">
+      <div class="logo">
+        <img src="https://via.placeholder.com/130x55/c44569/ffffff?text=Cake+Express+Lk" alt="Cake Express Lk Logo">
+      </div>
+      <!-- Logo pakkathula 3 follow button + count -->
+      <div style="display:flex; flex-direction:column; gap:3px">
+        <button class="follow-small insta-btn" onclick="followInsta()">📸 Insta</button>
+        <span class="follower-count" id="followerCount">12.5K</span>
+        <button class="follow-small tiktok-btn" onclick="followTiktok()">🎵 TikTok</button>
+        <button class="follow-small youtube-btn" onclick="followYoutube()">▶️ YouTube</button>
+      </div>
+    </div>
+    <div class="header-btns">
+      <a href="tel:+94786357139" class="call-btn">📞</a>
+      <button class="cart-btn" onclick="alert('WhatsApp la order pannunga anna')">🛒</button>
+    </div>
+  </div>
+  <div class="search-bar">
+    <input type="text" placeholder="I'm Shopping for..." id="searchInput">
+    <button id="searchBtn">🔍</button>
+  </div>
+  <p class="tagline">All over Jaffna Delivery Available</p>
+</header>
+
+<section class="hero">
+<h1>🍰 Cake Express Lk</h1>
+<div class="discount">🎉 10% Discount இப்போ!</div>
+<br>
+<a href="https://wa.me/94786357139?text=Hi%20Cake%20Express%20Lk" class="btn">📱 WhatsApp Order</a>
+</section>
+
+<section class="menu">
+<h2>Our Cake Collection</h2>
+
+<div class="cat-tabs">
+  <button class="cat-tab active" onclick="showCategory(event,'birthday')">🎂 Birthday Cake 100</button>
+  <button class="cat-tab" onclick="showCategory(event,'mini')">🧁 Mini Cake 20</button>
+  <button class="cat-tab" onclick="showCategory(event,'layer')">🎂 Layer Cake 30</button>
+  <button class="cat-tab" onclick="showCategory(event,'wedding')">💍 Wedding Cake 50</button>
+  <button class="cat-tab" onclick="showCategory(event,'kids')">🎈 Kids Cake 20</button>
+  <button class="cat-tab" onclick="showCategory(event,'heart')">❤️ Heart Cake 20</button>
+  <button class="cat-tab" onclick="showCategory(event,'square')">⬛ Square Cake 20</button>
+  <button class="cat-tab" onclick="showCategory(event,'round')">⭕ Round Cake 20</button>
+</div>
+
+<div class="cake-grid" id="cakeGrid"></div>
+
+<div class="delivery-check">
+<h4>🚚 Delivery Details</h4>
+<p><b>📍 Free Delivery:</b> Nelliady 5km வரை<br><b>⚡ Time:</b> 8 மணி நேரம்</p>
+<div style="margin-top:12px">
+<input type="text" placeholder="Enter Pincode" id="pincode">
+<button onclick="checkDelivery()">Check</button>
+</div>
+<p id="deliveryResult" style="margin-top:8px; font-weight:bold; color:#2e7d32"></p>
+</div>
+</section>
+
+<section class="footer">
+<h3>தொடர்புக்கு</h3>
+<p>📍 Nelliady, Jaffna</p>
+<p>📞 +94 78 635 7139</p>
+<p>© 2026 Cake Express Lk</p>
+</section>
+
+<a href="https://wa.me/94786357139?text=Hi%20Cake%20Express%20Lk" class="whatsapp-float" target="_blank">📱</a>
+
+<div id="orderPopup" class="popup-form">
+  <div class="popup-content">
+    <span class="close-popup" onclick="closePopup()">✕</span>
+    <h3>📝 Order Details</h3>
+    <input type="text" id="custName" placeholder="👤 உங்க பேர்" required>
+    <input type="tel" id="custPhone" placeholder="📞 Phone Number" required>
+    <input type="text" id="custAddress" placeholder="📍 Address" required>
+    <label>🎂 Cake Type</label>
+    <div class="cake-type-btns">
+      <button type="button" class="cake-type-btn" onclick="selectCakeType(this, 'Vegetable')">🥕 Vegetable</button>
+      <button type="button" class="cake-type-btn" onclick="selectCakeType(this, 'Butter')">🧈 Butter</button>
+      <button type="button" class="cake-type-btn" onclick="selectCakeType(this, 'Chocolate')">🍫 Chocolate</button>
+    </div>
+    <input type="hidden" id="cakeType" value="">
+    <label>📅 Date</label>
+    <input type="date" id="custDate" required>
+    <label>🕒 Time</label>
+    <input type="time" id="custTime" required>
+    <textarea id="custNote" placeholder="📝 Cake மேல Message" rows="2"></textarea>
+    <button onclick="sendWhatsApp()">📱 WhatsApp அனுப்பு</button>
+  </div>
+</div>
+
+<script>
+let currentCake = "";
+let currentPrice = "2500";
+let selectedCakeType = "";
+const whatsapp = "94786357139";
+const instaLink = "https://www.instagram.com/cake_express001?igsh=MW5remNrc2Jzd3p6OA==";
+const tiktokLink = "https://www.tiktok.com/@cakeexpress001?_r=1&_t=ZS-97Cxxbxb1K3";
+const youtubeLink = "https://youtube.com/@cakeexpress-v4o?si=yoPu6IzLoP153bQI";
+let isFollowing = localStorage.getItem('cakeFollow') === 'true';
+let followerNum = 12500;
+let webFollowers = localStorage.getItem('webFollowers') || 1247;
+let isWebFollowing = localStorage.getItem('webFollowing') === 'true';
+
+function toggleMenu() {
+  var menu = document.getElementById("sideMenu");
+  var overlay = document.getElementById("overlay");
+  menu.style.width = menu.style.width === "250px"? "0" : "250px";
+  overlay.style.width = overlay.style.width === "100%"? "0" : "100%";
+}
+
+function closeWelcome(){
+  document.getElementById("welcomePopup").style.display = "none";
+}
+
+function followInsta(){
+  window.open(instaLink, '_blank');
+  updateFollowCount();
+  closeWelcome();
+}
+
+function followTiktok(){
+  window.open(tiktokLink, '_blank');
+  updateFollowCount();
+  closeWelcome();
+}
+
+function followYoutube(){
+  window.open(youtubeLink, '_blank');
+  updateFollowCount();
+  closeWelcome();
+}
+
+function updateFollowCount(){
+  if(!isFollowing){
+    isFollowing = true;
+    followerNum += 1;
+    localStorage.setItem('cakeFollow', 'true');
+  }
+  let display = followerNum >= 1000? (followerNum/1000).toFixed(1)+'K' : followerNum;
+  let elem = document.getElementById('followerCount');
+  if(elem) elem.innerText = display;
+}
+
+function followWebsite(){
+  if('Notification' in window){
+    Notification.requestPermission().then(permission => {
+      if(permission === 'granted'){
+        if(!isWebFollowing){
+          webFollowers = parseInt(webFollowers) + 1;
+          localStorage.setItem('webFollowers', webFollowers);
+          localStorage.setItem('webFollowing', 'true');
+          isWebFollowing = true;
+        }
+        updateWebFollowCount();
+        new Notification('🔔 Cake Express Lk Follow!', {
+          body: 'Offer vandha notification varum'
+        });
+        document.getElementById('webFollowBtn').innerText = '✅ Following';
+        document.getElementById('webFollowBtn').style.background = '#4caf50';
+        alert('✅ Follow pannitainga anna!');
+      } else {
+        alert('Notification allow pannanum anna');
+      }
+    });
+  }
+  closeWelcome();
+}
+
+function updateWebFollowCount(){
+  let count = webFollowers;
+  let display = count >= 1000? (count/1000).toFixed(1)+'K' : count;
+  let elem = document.getElementById('webFollowCount');
+  if(elem) elem.innerText = display + ' per follow pannirukaanga';
+}
+
+window.onload = function(){
+  updateFollowCount();
+  updateWebFollowCount();
+  if(isWebFollowing){
+    document.getElementById('webFollowBtn').innerText = '✅ Following';
+    document.getElementById('webFollowBtn').style.background = '#4caf50';
+  }
+  setTimeout(closeWelcome, 3000);
+}
+
+const cakeGrid = document.getElementById('cakeGrid');
+
+// Birthday 100
+for(let i=1; i<=100; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card show birthday';
+  card.innerHTML = `
+    <img src="cake${i}.jpg" alt="Birthday Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Cake+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Birthday Cake ${i}</h3>
+    <p class="price"><del>LKR 2,800/-</del> LKR 2,500/-</p>
+    <button onclick="openPopup('Birthday Cake ${i}', '2500')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Mini 20
+for(let i=1; i<=20; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card mini';
+  card.innerHTML = `
+    <img src="mini${i}.jpg" alt="Mini Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Mini+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Mini Cake ${i}</h3>
+    <p class="price"><del>LKR 900/-</del> LKR 800/-</p>
+    <button onclick="openPopup('Mini Cake ${i}', '800')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Layer 30
+for(let i=1; i<=30; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card layer';
+  card.innerHTML = `
+    <img src="layer${i}.jpg" alt="Layer Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Layer+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Layer Cake ${i}</h3>
+    <p class="price"><del>LKR 4,500/-</del> LKR 4,000/-</p>
+    <button onclick="openPopup('Layer Cake ${i}', '4000')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Wedding 50
+for(let i=1; i<=50; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card wedding';
+  card.innerHTML = `
+    <img src="wedding${i}.jpg" alt="Wedding Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Wedding+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Wedding Cake ${i}</h3>
+    <p class="price"><del>LKR 9,500/-</del> LKR 8,500/-</p>
+    <button onclick="openPopup('Wedding Cake ${i}', '8500')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Kids 20
+for(let i=1; i<=20; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card kids';
+  card.innerHTML = `
+    <img src="kids${i}.jpg" alt="Kids Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Kids+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Kids Cake ${i}</h3>
+    <p class="price"><del>LKR 2,000/-</del> LKR 1,800/-</p>
+    <button onclick="openPopup('Kids Cake ${i}', '1800')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Heart 20
+for(let i=1; i<=20; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card heart';
+  card.innerHTML = `
+    <img src="heart${i}.jpg" alt="Heart Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Heart+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Heart Cake ${i}</h3>
+    <p class="price"><del>LKR 3,100/-</del> LKR 2,800/-</p>
+    <button onclick="openPopup('Heart Cake ${i}', '2800')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Square 20
+for(let i=1; i<=20; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card square';
+  card.innerHTML = `
+    <img src="square${i}.jpg" alt="Square Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Square+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Square Cake ${i}</h3>
+    <p class="price"><del>LKR 3,600/-</del> LKR 3,200/-</p>
+    <button onclick="openPopup('Square Cake ${i}', '3200')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+// Round 20
+for(let i=1; i<=20; i++){
+  const card = document.createElement('div');
+  card.className = 'cake-card round';
+  card.innerHTML = `
+    <img src="round${i}.jpg" alt="Round Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Round+${i}'">
+    <div class="watermark">CAKE EXPRESS LK</div>
+    <h3>Round Cake ${i}</h3>
+    <p class="price"><del>LKR 3,400/-</del> LKR 3,000/-</p>
+    <button onclick="openPopup('Round Cake ${i}', '3000')" class="order-btn">🛒 Order Now</button>
+  `;
+  cakeGrid.appendChild(card);
+}
+
+function openPopup(cake, price){
+  currentCake = cake; currentPrice = price; selectedCakeType = "";
+  document.getElementById("cakeType").value = "";
+  document.querySelectorAll('.cake-type-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById("orderPopup").style.display = "block";
+  document.getElementById("custDate").min = new Date().toISOString().split("T")[0];
+}
+
+function closePopup(){
+  document.getElementById("orderPopup").style.display = "none";
+}
+
+function selectCakeType(btn, type){
+  document.querySelectorAll('.cake-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); selectedCakeType = type; document.getElementById("cakeType").value = type;
+}
+
+function sendWhatsApp(){
+  let name = document.getElementById("custName").value;
+  let phone = document.getElementById("custPhone").value;
+  let address = document.getElementById("custAddress").value;
+  let cakeType = document.getElementById("cakeType").value;
+  let date = document.getElementById("custDate").value;
+  let time = document.getElementById("custTime").value;
+  let note = document.getElementById("custNote").value;
+
+  if(!name ||!phone ||!address ||!cakeType ||!date ||!time){
+    alert("Ellam fill pannunga anna");
+    return;
+  }
+
+  let msg = `🍰 Cake Express Lk Order%0A%0ACake: ${currentCake}%0AType: ${cakeType}%0APrice: LKR ${currentPrice}/-%0A%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A📍 Address: ${address}%0A📅 Date: ${date}%0A🕒 Time: ${time}%0A📝 Message: ${note}`;
+
+  window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
+  closePopup();
+}
+
+function checkDelivery(){
+  let pin = document.getElementById("pincode").value;
+  let result = document.getElementById("deliveryResult");
+  if(pin.startsWith("40")) result.innerHTML = "✅ Free Delivery Available!";
+  else result.innerHTML = "❌ Delivery not available";
+}
+
+function showCategory(e, cat){
+  document.querySelectorAll('.cake-card').forEach(card=>{
+    card.classList.remove('show');
+    if(card.classList.contains(cat)){
+      card.classList.add('show');
+    }
+  });
+  document.querySelectorAll('.cat-tab').forEach(btn=>btn.classList.remove('active'));
+  e.target.classList.add('active');
+}
+
+document.getElementById('searchBtn').onclick = function(){
+  let search = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.cake-card').forEach(card=>{
+    let name = card.querySelector('h3').textContent.toLowerCase();
+    if(name.includes(search)){
+      card.classList.add('show');
+    } else {
+      card.classList.remove('show');
+    }
+  });
+}
+</script>
+</body>
+</html>
