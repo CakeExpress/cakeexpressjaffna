@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cake Express Lk - All Cakes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 body{background:#fff5f7;color:#333; transition:0.3s}
@@ -76,7 +77,7 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
 .popup-form{display:none; position:fixed; z-index:400; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); overflow-y:auto}
 .popup-content{background:#fff; margin:5% auto; padding:20px; border-radius:10px; width:90%; max-width:420px; max-height:90vh; overflow-y:auto}
 .popup-content h3{color:#c44569; margin-bottom:15px; text-align:center; font-size:1.3rem}
-.popup-content input,.popup-content textarea{width:100%; padding:12px; margin:5px 0 10px 0; border:1px solid #ddd; border-radius:5px; font-size:14px}
+.popup-content input,.popup-content textarea,.popup-content select{width:100%; padding:12px; margin:5px 0 10px 0; border:1px solid #ddd; border-radius:5px; font-size:14px}
 .popup-content button{width:100%; padding:14px; background:#25D366; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; margin-top:10px; font-size:16px}
 .close-popup{float:right; font-size:28px; cursor:pointer; color:#999}
 
@@ -124,7 +125,6 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
       <div class="logo">
         <img src="https://via.placeholder.com/130x55/c44569/ffffff?text=Cake+Express+Lk" alt="Cake Express Lk Logo">
       </div>
-      <!-- Logo pakkathula 3 follow button + count -->
       <div style="display:flex; flex-direction:column; gap:3px">
         <button class="follow-small insta-btn" onclick="followInsta()">📸 Insta</button>
         <span class="follower-count" id="followerCount">12.5K</span>
@@ -134,7 +134,7 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
     </div>
     <div class="header-btns">
       <a href="tel:+94786357139" class="call-btn">📞</a>
-      <button class="cart-btn" onclick="alert('WhatsApp la order pannunga anna')">🛒</button>
+      <button class="cart-btn" onclick="showOrderHistory()">📋</button>
     </div>
   </div>
   <div class="search-bar">
@@ -153,7 +153,6 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
 
 <section class="menu">
 <h2>Our Cake Collection</h2>
-
 <div class="cat-tabs">
   <button class="cat-tab active" onclick="showCategory(event,'birthday')">🎂 Birthday Cake 100</button>
   <button class="cat-tab" onclick="showCategory(event,'mini')">🧁 Mini Cake 20</button>
@@ -164,7 +163,6 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
   <button class="cat-tab" onclick="showCategory(event,'square')">⬛ Square Cake 20</button>
   <button class="cat-tab" onclick="showCategory(event,'round')">⭕ Round Cake 20</button>
 </div>
-
 <div class="cake-grid" id="cakeGrid"></div>
 
 <div class="delivery-check">
@@ -187,10 +185,13 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
 
 <a href="https://wa.me/94786357139?text=Hi%20Cake%20Express%20Lk" class="whatsapp-float" target="_blank">📱</a>
 
+<!-- Order Popup -->
 <div id="orderPopup" class="popup-form">
   <div class="popup-content">
     <span class="close-popup" onclick="closePopup()">✕</span>
     <h3>📝 Order Details</h3>
+    <p id="selectedCakeInfo" style="font-weight:bold; color:#c44569; margin-bottom:10px"></p>
+    <p id="selectedPriceInfo" style="margin-bottom:15px"></p>
     <input type="text" id="custName" placeholder="👤 உங்க பேர்" required>
     <input type="tel" id="custPhone" placeholder="📞 Phone Number" required>
     <input type="text" id="custAddress" placeholder="📍 Address" required>
@@ -207,6 +208,20 @@ header{background:white; padding:10px 15px; box-shadow:0 2px 5px rgba(0,0,0,0.1)
     <input type="time" id="custTime" required>
     <textarea id="custNote" placeholder="📝 Cake மேல Message" rows="2"></textarea>
     <button onclick="sendWhatsApp()">📱 WhatsApp அனுப்பு</button>
+  </div>
+</div>
+
+<!-- History Popup -->
+<div id="historyPopup" class="popup-form">
+  <div class="popup-content" style="max-width:650px">
+    <span class="close-popup" onclick="closeHistory()">✕</span>
+    <h3>📋 Enoda Order History</h3>
+    <div style="display:flex; gap:8px; margin-bottom:15px">
+      <button class="history-tab" onclick="filterHistory('all', event)" style="flex:1; padding:10px; border:none; background:#e91e63; color:white; border-radius:8px; font-weight:bold; cursor:pointer">All</button>
+      <button class="history-tab" onclick="filterHistory('Pending', event)" style="flex:1; padding:10px; border:none; background:#e0e0e0; border-radius:8px; font-weight:bold; cursor:pointer">Pending</button>
+      <button class="history-tab" onclick="filterHistory('Cancelled', event)" style="flex:1; padding:10px; border:none; background:#e0e0e0; border-radius:8px; font-weight:bold; cursor:pointer">Cancelled</button>
+    </div>
+    <div id="orderHistoryList" style="max-height:400px; overflow-y:auto"></div>
   </div>
 </div>
 
@@ -231,79 +246,27 @@ function toggleMenu() {
 }
 
 function closeWelcome(){
-  document.getElementById("welcomePopup").style.display = "none";
+  let popup = document.getElementById("welcomePopup");
+  if(popup){ popup.style.display = "none"; }
 }
 
-function followInsta(){
-  window.open(instaLink, '_blank');
-  updateFollowCount();
-  closeWelcome();
-}
+function followInsta(){window.open(instaLink, '_blank'); updateFollowCount();}
+function followTiktok(){window.open(tiktokLink, '_blank'); updateFollowCount();}
+function followYoutube(){window.open(youtubeLink, '_blank'); updateFollowCount();}
+function updateFollowCount(){if(!isFollowing){isFollowing = true; followerNum += 1; localStorage.setItem('cakeFollow', 'true');} let display = followerNum >= 1000? (followerNum/1000).toFixed(1)+'K' : followerNum; let elem = document.getElementById('followerCount'); if(elem) elem.innerText = display;}
+function followWebsite(){if('Notification' in window){Notification.requestPermission().then(permission => {if(permission === 'granted'){if(!isWebFollowing){webFollowers = parseInt(webFollowers) + 1; localStorage.setItem('webFollowers', webFollowers); localStorage.setItem('webFollowing', 'true'); isWebFollowing = true;} updateWebFollowCount(); new Notification('🔔 Cake Express Lk Follow!', {body: 'Offer vandha notification varum'}); document.getElementById('webFollowBtn').innerText = '✅ Following'; document.getElementById('webFollowBtn').style.background = '#4caf50'; alert('✅ Follow pannitainga anna!');} else {alert('Notification allow pannanum anna');}});} closeWelcome();}
+function updateWebFollowCount(){let count = webFollowers; let display = count >= 1000? (count/1000).toFixed(1)+'K' : count; let elem = document.getElementById('webFollowCount'); if(elem) elem.innerText = display + ' per follow pannirukaanga';}
 
-function followTiktok(){
-  window.open(tiktokLink, '_blank');
-  updateFollowCount();
-  closeWelcome();
-}
-
-function followYoutube(){
-  window.open(youtubeLink, '_blank');
-  updateFollowCount();
-  closeWelcome();
-}
-
-function updateFollowCount(){
-  if(!isFollowing){
-    isFollowing = true;
-    followerNum += 1;
-    localStorage.setItem('cakeFollow', 'true');
-  }
-  let display = followerNum >= 1000? (followerNum/1000).toFixed(1)+'K' : followerNum;
-  let elem = document.getElementById('followerCount');
-  if(elem) elem.innerText = display;
-}
-
-function followWebsite(){
-  if('Notification' in window){
-    Notification.requestPermission().then(permission => {
-      if(permission === 'granted'){
-        if(!isWebFollowing){
-          webFollowers = parseInt(webFollowers) + 1;
-          localStorage.setItem('webFollowers', webFollowers);
-          localStorage.setItem('webFollowing', 'true');
-          isWebFollowing = true;
-        }
-        updateWebFollowCount();
-        new Notification('🔔 Cake Express Lk Follow!', {
-          body: 'Offer vandha notification varum'
-        });
-        document.getElementById('webFollowBtn').innerText = '✅ Following';
-        document.getElementById('webFollowBtn').style.background = '#4caf50';
-        alert('✅ Follow pannitainga anna!');
-      } else {
-        alert('Notification allow pannanum anna');
-      }
-    });
-  }
-  closeWelcome();
-}
-
-function updateWebFollowCount(){
-  let count = webFollowers;
-  let display = count >= 1000? (count/1000).toFixed(1)+'K' : count;
-  let elem = document.getElementById('webFollowCount');
-  if(elem) elem.innerText = display + ' per follow pannirukaanga';
-}
-
-window.onload = function(){
+// 4 SECOND AUTO CLOSE
+document.addEventListener('DOMContentLoaded', function(){
   updateFollowCount();
   updateWebFollowCount();
   if(isWebFollowing){
     document.getElementById('webFollowBtn').innerText = '✅ Following';
     document.getElementById('webFollowBtn').style.background = '#4caf50';
   }
-  setTimeout(closeWelcome, 3000);
-}
+  setTimeout(closeWelcome, 4000);
+});
 
 const cakeGrid = document.getElementById('cakeGrid');
 
@@ -311,130 +274,36 @@ const cakeGrid = document.getElementById('cakeGrid');
 for(let i=1; i<=100; i++){
   const card = document.createElement('div');
   card.className = 'cake-card show birthday';
-  card.innerHTML = `
-    <img src="cake${i}.jpg" alt="Birthday Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Cake+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Birthday Cake ${i}</h3>
-    <p class="price"><del>LKR 2,800/-</del> LKR 2,500/-</p>
-    <button onclick="openPopup('Birthday Cake ${i}', '2500')" class="order-btn">🛒 Order Now</button>
-  `;
+  card.innerHTML = `<img src="cake${i}.jpg" alt="Birthday Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Cake+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Birthday Cake ${i}</h3><p class="price"><del>LKR 2,800/-</del> LKR 2,500/-</p><button onclick="openPopup('Birthday Cake ${i}', '2500')" class="order-btn">🛒 Order Now</button>`;
   cakeGrid.appendChild(card);
 }
-
 // Mini 20
-for(let i=1; i<=20; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card mini';
-  card.innerHTML = `
-    <img src="mini${i}.jpg" alt="Mini Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Mini+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Mini Cake ${i}</h3>
-    <p class="price"><del>LKR 900/-</del> LKR 800/-</p>
-    <button onclick="openPopup('Mini Cake ${i}', '800')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
-
+for(let i=1; i<=20; i++){const card = document.createElement('div'); card.className = 'cake-card mini'; card.innerHTML = `<img src="mini${i}.jpg" alt="Mini Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Mini+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Mini Cake ${i}</h3><p class="price"><del>LKR 900/-</del> LKR 800/-</p><button onclick="openPopup('Mini Cake ${i}', '800')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 // Layer 30
-for(let i=1; i<=30; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card layer';
-  card.innerHTML = `
-    <img src="layer${i}.jpg" alt="Layer Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Layer+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Layer Cake ${i}</h3>
-    <p class="price"><del>LKR 4,500/-</del> LKR 4,000/-</p>
-    <button onclick="openPopup('Layer Cake ${i}', '4000')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
-
+for(let i=1; i<=30; i++){const card = document.createElement('div'); card.className = 'cake-card layer'; card.innerHTML = `<img src="layer${i}.jpg" alt="Layer Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Layer+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Layer Cake ${i}</h3><p class="price"><del>LKR 4,500/-</del> LKR 4,000/-</p><button onclick="openPopup('Layer Cake ${i}', '4000')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 // Wedding 50
-for(let i=1; i<=50; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card wedding';
-  card.innerHTML = `
-    <img src="wedding${i}.jpg" alt="Wedding Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Wedding+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Wedding Cake ${i}</h3>
-    <p class="price"><del>LKR 9,500/-</del> LKR 8,500/-</p>
-    <button onclick="openPopup('Wedding Cake ${i}', '8500')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
-
+for(let i=1; i<=50; i++){const card = document.createElement('div'); card.className = 'cake-card wedding'; card.innerHTML = `<img src="wedding${i}.jpg" alt="Wedding Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Wedding+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Wedding Cake ${i}</h3><p class="price"><del>LKR 9,500/-</del> LKR 8,500/-</p><button onclick="openPopup('Wedding Cake ${i}', '8500')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 // Kids 20
-for(let i=1; i<=20; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card kids';
-  card.innerHTML = `
-    <img src="kids${i}.jpg" alt="Kids Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Kids+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Kids Cake ${i}</h3>
-    <p class="price"><del>LKR 2,000/-</del> LKR 1,800/-</p>
-    <button onclick="openPopup('Kids Cake ${i}', '1800')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
-
+for(let i=1; i<=20; i++){const card = document.createElement('div'); card.className = 'cake-card kids'; card.innerHTML = `<img src="kids${i}.jpg" alt="Kids Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Kids+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Kids Cake ${i}</h3><p class="price"><del>LKR 2,000/-</del> LKR 1,800/-</p><button onclick="openPopup('Kids Cake ${i}', '1800')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 // Heart 20
-for(let i=1; i<=20; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card heart';
-  card.innerHTML = `
-    <img src="heart${i}.jpg" alt="Heart Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Heart+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Heart Cake ${i}</h3>
-    <p class="price"><del>LKR 3,100/-</del> LKR 2,800/-</p>
-    <button onclick="openPopup('Heart Cake ${i}', '2800')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
-
+for(let i=1; i<=20; i++){const card = document.createElement('div'); card.className = 'cake-card heart'; card.innerHTML = `<img src="heart${i}.jpg" alt="Heart Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Heart+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Heart Cake ${i}</h3><p class="price"><del>LKR 3,100/-</del> LKR 2,800/-</p><button onclick="openPopup('Heart Cake ${i}', '2800')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 // Square 20
-for(let i=1; i<=20; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card square';
-  card.innerHTML = `
-    <img src="square${i}.jpg" alt="Square Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Square+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Square Cake ${i}</h3>
-    <p class="price"><del>LKR 3,600/-</del> LKR 3,200/-</p>
-    <button onclick="openPopup('Square Cake ${i}', '3200')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
-
+for(let i=1; i<=20; i++){const card = document.createElement('div'); card.className = 'cake-card square'; card.innerHTML = `<img src="square${i}.jpg" alt="Square Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Square+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Square Cake ${i}</h3><p class="price"><del>LKR 3,600/-</del> LKR 3,200/-</p><button onclick="openPopup('Square Cake ${i}', '3200')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 // Round 20
-for(let i=1; i<=20; i++){
-  const card = document.createElement('div');
-  card.className = 'cake-card round';
-  card.innerHTML = `
-    <img src="round${i}.jpg" alt="Round Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Round+${i}'">
-    <div class="watermark">CAKE EXPRESS LK</div>
-    <h3>Round Cake ${i}</h3>
-    <p class="price"><del>LKR 3,400/-</del> LKR 3,000/-</p>
-    <button onclick="openPopup('Round Cake ${i}', '3000')" class="order-btn">🛒 Order Now</button>
-  `;
-  cakeGrid.appendChild(card);
-}
+for(let i=1; i<=20; i++){const card = document.createElement('div'); card.className = 'cake-card round'; card.innerHTML = `<img src="round${i}.jpg" alt="Round Cake ${i}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x180?text=Round+${i}'"><div class="watermark">CAKE EXPRESS LK</div><h3>Round Cake ${i}</h3><p class="price"><del>LKR 3,400/-</del> LKR 3,000/-</p><button onclick="openPopup('Round Cake ${i}', '3000')" class="order-btn">🛒 Order Now</button>`; cakeGrid.appendChild(card);}
 
 function openPopup(cake, price){
   currentCake = cake; currentPrice = price; selectedCakeType = "";
   document.getElementById("cakeType").value = "";
+  document.getElementById("selectedCakeInfo").innerText = "Cake: " + cake;
+  document.getElementById("selectedPriceInfo").innerText = "Price: LKR " + price + "/-";
   document.querySelectorAll('.cake-type-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById("orderPopup").style.display = "block";
   document.getElementById("custDate").min = new Date().toISOString().split("T")[0];
 }
 
-function closePopup(){
-  document.getElementById("orderPopup").style.display = "none";
-}
-
-function selectCakeType(btn, type){
-  document.querySelectorAll('.cake-type-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); selectedCakeType = type; document.getElementById("cakeType").value = type;
-}
+function closePopup(){document.getElementById("orderPopup").style.display = "none";}
+function selectCakeType(btn, type){document.querySelectorAll('.cake-type-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); selectedCakeType = type; document.getElementById("cakeType").value = type;}
 
 function sendWhatsApp(){
   let name = document.getElementById("custName").value;
@@ -450,41 +319,93 @@ function sendWhatsApp(){
     return;
   }
 
-  let msg = `🍰 Cake Express Lk Order%0A%0ACake: ${currentCake}%0AType: ${cakeType}%0APrice: LKR ${currentPrice}/-%0A%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A📍 Address: ${address}%0A📅 Date: ${date}%0A🕒 Time: ${time}%0A📝 Message: ${note}`;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let billNo = "CE" + Date.now().toString().slice(-6);
+  let orderDate = new Date().toLocaleDateString('en-GB');
 
+  doc.setFontSize(20); doc.setTextColor(196, 69, 105);
+  doc.text("CAKE EXPRESS LK", 105, 20, {align: "center"});
+  doc.setFontSize(10); doc.setTextColor(0,0,0);
+  doc.text(`Bill No: ${billNo}`, 20, 35); doc.text(`Date: ${orderDate}`, 20, 42);
+  doc.text(`Cake: ${currentCake}`, 20, 55); doc.text(`Type: ${cakeType}`, 20, 62); doc.text(`Price: LKR ${currentPrice}/-`, 20, 69);
+  doc.text(`Customer: ${name}`, 20, 82); doc.text(`Phone: ${phone}`, 20, 89); doc.text(`Address: ${address}`, 20, 96); doc.text(`Delivery: ${date} at ${time}`, 20, 103);
+  doc.save(`${billNo}.pdf`);
+
+  let orderData = {billNo, date:orderDate, cake:currentCake, type:cakeType, price:currentPrice, customer:name, phone, address, deliveryDate:date, deliveryTime:time, note, status:"Pending"};
+  let orders = JSON.parse(localStorage.getItem('cakeOrders')) || [];
+  orders.unshift(orderData); localStorage.setItem('cakeOrders', JSON.stringify(orders));
+
+  let msg = `🍰 *NEW ORDER - Cake Express Lk*%0A%0A*Bill No:* ${billNo}%0A*Cake:* ${currentCake}%0A*Type:* ${cakeType}%0A*Price:* LKR ${currentPrice}/-%0A%0A👤 *Name:* ${name}%0A📞 *Phone:* ${phone}%0A📍 *Address:* ${address}%0A📅 *Date:* ${date}%0A🕒 *Time:* ${time}%0A📝 *Message:* ${note}`;
   window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
   closePopup();
+  alert("✅ PDF Bill download aagidum! WhatsApp um open aagum");
+}
+
+function showOrderHistory(){document.getElementById("historyPopup").style.display = "block"; loadOrderHistory('all')}
+function closeHistory(){document.getElementById("historyPopup").style.display = "none"}
+function filterHistory(status, e){document.querySelectorAll('.history-tab').forEach(btn=>{btn.style.background='#e0e0e0'; btn.style.color='#333'}); e.target.style.background='#e91e63'; e.target.style.color='white'; loadOrderHistory(status);}
+function loadOrderHistory(filter){
+  let orders = JSON.parse(localStorage.getItem('cakeOrders')) || [];
+  let listDiv = document.getElementById("orderHistoryList");
+  let filteredOrders = filter==='all'?orders:orders.filter(o=>o.status===filter);
+  if(filteredOrders.length===0){listDiv.innerHTML = `<p style='text-align:center; color:#999; padding:20px'>Order illa anna 😅</p>`; return;}
+  let html = "";
+  filteredOrders.forEach((order)=>{
+    let originalIndex = orders.indexOf(order);
+    let statusColor = order.status==='Pending'?'#ff9800':order.status==='Cancelled'?'#f44336':'#4caf50';
+    html += `<div style="border:1px solid #ddd; border-radius:10px; padding:15px; margin-bottom:12px; background:${order.status==='Cancelled'?'#ffebee':'#fff'}; opacity:${order.status==='Cancelled'?0.6:1}">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px"><b style="color:#c44569">${order.billNo}</b><span style="background:${statusColor}; color:white; padding:3px 10px; border-radius:12px; font-size:11px">${order.status}</span></div>
+      <p><b>Cake:</b> ${order.cake}</p><p><b>Type:</b> ${order.type} | <b>Price:</b> LKR ${order.price}/-</p><p><b>Delivery:</b> ${order.deliveryDate} at ${order.deliveryTime}</p><p><b>Phone:</b> ${order.phone}</p>
+      <div style="margin-top:10px">
+        <button onclick="downloadOldBill(${originalIndex})" style="background:#2196F3; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; font-size:12px">📄 Bill</button>
+        ${order.status==='Pending'?`<button onclick="cancelOrder(${originalIndex})" style="background:#f44336; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; font-size:12px; margin-left:5px">❌ Cancel</button>`:''}
+      </div>
+    </div>`;
+  });
+  listDiv.innerHTML
+  listDiv.innerHTML = html;
+}
+
+function cancelOrder(index){
+  let orders = JSON.parse(localStorage.getItem('cakeOrders')) || [];
+  orders[index].status = "Cancelled";
+  localStorage.setItem('cakeOrders', JSON.stringify(orders));
+  loadOrderHistory('all');
+  alert("❌ Order Cancel aagiduchu");
+}
+
+function downloadOldBill(index){
+  let orders = JSON.parse(localStorage.getItem('cakeOrders')) || [];
+  let order = orders[index];
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(20); doc.setTextColor(196, 69, 105);
+  doc.text("CAKE EXPRESS LK", 105, 20, {align: "center"});
+  doc.setFontSize(10); doc.setTextColor(0,0,0);
+  doc.text(`Bill No: ${order.billNo}`, 20, 35); doc.text(`Date: ${order.date}`, 20, 42);
+  doc.text(`Cake: ${order.cake}`, 20, 55); doc.text(`Type: ${order.type}`, 20, 62); doc.text(`Price: LKR ${order.price}/-`, 20, 69);
+  doc.text(`Customer: ${order.customer}`, 20, 82); doc.text(`Phone: ${order.phone}`, 20, 89); 
+  doc.text(`Address: ${order.address}`, 20, 96); doc.text(`Delivery: ${order.deliveryDate} at ${order.deliveryTime}`, 20, 103);
+  doc.save(`${order.billNo}.pdf`);
+}
+
+function showCategory(e, category){
+  document.querySelectorAll('.cat-tab').forEach(btn=>btn.classList.remove('active'));
+  e.target.classList.add('active');
+  document.querySelectorAll('.cake-card').forEach(card=>{
+    card.classList.remove('show');
+    if(card.classList.contains(category)) card.classList.add('show');
+  });
 }
 
 function checkDelivery(){
-  let pin = document.getElementById("pincode").value;
-  let result = document.getElementById("deliveryResult");
-  if(pin.startsWith("40")) result.innerHTML = "✅ Free Delivery Available!";
-  else result.innerHTML = "❌ Delivery not available";
+  let pincode = document.getElementById('pincode').value;
+  let result = document.getElementById('deliveryResult');
+  if(pincode.startsWith('4')) result.innerText = "✅ Free Delivery Available - 8 hours";
+  else result.innerText = "🚚 Delivery Charge: LKR 300 - 24 hours";
 }
 
-function showCategory(e, cat){
-  document.querySelectorAll('.cake-card').forEach(card=>{
-    card.classList.remove('show');
-    if(card.classList.contains(cat)){
-      card.classList.add('show');
-    }
-  });
-  document.querySelectorAll('.cat-tab').forEach(btn=>btn.classList.remove('active'));
-  e.target.classList.add('active');
-}
-
-document.getElementById('searchBtn').onclick = function(){
-  let search = document.getElementById('searchInput').value.toLowerCase();
-  document.querySelectorAll('.cake-card').forEach(card=>{
-    let name = card.querySelector('h3').textContent.toLowerCase();
-    if(name.includes(search)){
-      card.classList.add('show');
-    } else {
-      card.classList.remove('show');
-    }
-  });
-}
 </script>
 </body>
 </html>
